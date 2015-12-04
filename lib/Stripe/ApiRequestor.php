@@ -2,6 +2,26 @@
 
 class Stripe_ApiRequestor
 {
+    public static $CURLOPT_CONNECTTIMEOUT = 3;
+    public static $CURLOPT_TIMEOUT = 4;
+
+    /**
+     * Set time out parameters
+     *
+     * @param int $connectTimeout   Timeout for curl's connect timeout
+     * @param int $timeout          Timeout for curl's operation timeout
+     * @return bool     True if timeouts where set
+     */
+    static public function setTimeouts($connectTimeout = 30, $timeout = 80)
+    {
+        if (!is_integer($connectTimeout) || !is_integer($timeout)) {
+           return false;
+        }
+        static::$CURLOPT_CONNECTTIMEOUT = $connectTimeout;
+        static::$CURLOPT_TIMEOUT = $timeout;
+        return true;
+    }
+
   /**
    * @var string $apiKey The API key that's to be used to make requests.
    */
@@ -246,8 +266,8 @@ class Stripe_ApiRequestor
     $absUrl = self::utf8($absUrl);
     $opts[CURLOPT_URL] = $absUrl;
     $opts[CURLOPT_RETURNTRANSFER] = true;
-    $opts[CURLOPT_CONNECTTIMEOUT] = 30;
-    $opts[CURLOPT_TIMEOUT] = 80;
+    $opts[CURLOPT_CONNECTTIMEOUT] = static::$CURLOPT_CONNECTTIMEOUT;
+    $opts[CURLOPT_TIMEOUT] = static::$CURLOPT_TIMEOUT;
     $opts[CURLOPT_RETURNTRANSFER] = true;
     $opts[CURLOPT_HTTPHEADER] = $headers;
     if (!Stripe::$verifySslCerts)
