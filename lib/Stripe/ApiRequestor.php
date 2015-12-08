@@ -2,17 +2,17 @@
 
 class Stripe_ApiRequestor
 {
-    public static $CURLOPT_CONNECTTIMEOUT = 3;
-    public static $CURLOPT_TIMEOUT = 4;
+    public static $CURLOPT_CONNECTTIMEOUT = 25;
+    public static $CURLOPT_TIMEOUT = 30;
 
     /**
      * Set time out parameters
      *
-     * @param int $connectTimeout   Timeout for curl's connect timeout
-     * @param int $timeout          Timeout for curl's operation timeout
+     * @param int $connectTimeout   Timeout for curl's connect timeout. If set to zero, wait infinitely
+     * @param int $timeout          Timeout for curl's operation timeout. If set to zero, wait infinitely
      * @return bool     True if timeouts where set
      */
-    static public function setTimeouts($connectTimeout = 30, $timeout = 80)
+    static public function setTimeouts($connectTimeout, $timeout)
     {
         if (!is_integer($connectTimeout) || !is_integer($timeout)) {
            return false;
